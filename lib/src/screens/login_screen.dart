@@ -3,17 +3,31 @@ import 'dart:math';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:placess_2021/src/api/auth_api.dart';
+import 'package:placess_2021/src/core/base_widget.dart';
 import 'package:placess_2021/src/model/user_model.dart';
 import 'package:placess_2021/src/screens/signup_screen.dart';
 import 'package:placess_2021/src/screens/dashboard_screen.dart';
+import 'package:placess_2021/src/viewmodels/login_view_model.dart';
 import 'package:placess_2021/src/widgets/custom_app_bar.dart';
 import 'package:placess_2021/src/widgets/input_email.dart';
 import 'package:placess_2021/src/widgets/input_password.dart';
 import 'package:placess_2021/src/widgets/shared/app_colors.dart';
+import 'package:provider/provider.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends StatefulWidget {
+  @override
+  _LoginScreenState createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController _emailController = TextEditingController();
+
   final TextEditingController _passwordController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,32 +38,38 @@ class LoginScreen extends StatelessWidget {
         context: context,
         subTitle: "Login to your \n account",
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                SizedBox(height: 24),
-                InputEmail(
-                  controller: _emailController,
+      body: BaseWidget<LoginViewModel>(
+        model: LoginViewModel(),
+        builder: (BuildContext context, LoginViewModel model, Widget? child) {
+          return Column(
+            children: <Widget>[
+              Expanded(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    SizedBox(height: 24),
+                    InputEmail(
+                      controller: _emailController,
+                    ),
+                    InputPassword(
+                      controller: _passwordController,
+                    ),
+                    _buildOption(context),
+                    _buildSubmitButton(context, model),
+                    SizedBox(height: 12),
+                    _buildTermsAndConditions(context),
+                    SizedBox(height: 12),
+                  ],
                 ),
-                InputPassword(
-                  controller: _passwordController,
-                ),
-                _buildOption(context),
-                _buildSubmitButton(context),
-                SizedBox(height: 12),
-                _buildTermsAndConditions(context),
-                SizedBox(height: 12),
-              ],
-            ),
-          ),
-          _buildSignUpSection(context)
-        ],
+              ),
+              _buildSignUpSection(context)
+            ],
+          );
+        },
       ),
     );
   }
+
 
   Widget _buildOption(BuildContext context) {
     return Container(
@@ -125,7 +145,7 @@ class LoginScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSubmitButton(BuildContext context) {
+  Widget _buildSubmitButton(BuildContext context, LoginViewModel model) {
     return Container(
       margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
       child: ButtonTheme(
@@ -138,20 +158,20 @@ class LoginScreen extends StatelessWidget {
             padding: EdgeInsets.all(18.0),
             primary: primaryColor,
           ),
-          onPressed: () {
-            _onSubmit(context);
+          onPressed: model.busy ? null : () {
+            _onSubmit(context, model);
           },
-          child: Text("Submit"),
+          child: model.busy ? CircularProgressIndicator() : Text("Submit"),
         ),
       ),
     );
   }
 
-  Future _onSubmit(BuildContext context) async {
+  Future _onSubmit(BuildContext context, LoginViewModel model) async {
     final api = AuthApi();
 
     try {
-      await Future.delayed(Duration(seconds: 3));
+      await model.login(_emailController.text, _passwordController.text);
       // var response =
       //     await api.login(_emailController.text, _passwordController.text);
       //delete this override sometime later
