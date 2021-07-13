@@ -40,6 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
       ),
       body: BaseWidget<LoginViewModel>(
         model: LoginViewModel(),
+        // onModelReady: (model){}, //not required in login
         builder: (BuildContext context, LoginViewModel model, Widget? child) {
           return Column(
             children: <Widget>[
@@ -168,10 +169,9 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future _onSubmit(BuildContext context, LoginViewModel model) async {
-    final api = AuthApi();
 
     try {
-      await model.login(_emailController.text, _passwordController.text);
+      await model.login(_emailController .text, _passwordController.text);
       // var response =
       //     await api.login(_emailController.text, _passwordController.text);
       //delete this override sometime later
