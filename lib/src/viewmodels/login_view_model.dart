@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:placess_2021/src/core/base_view_model.dart';
+import 'package:placess_2021/src/services/auth/login_service.dart';
 
 class LoginViewModel extends BaseViewModel{
 
-  Future<void> login(String email, String password) async{
+  final loginService = LoginService();
+  String get errorMessage => loginService.errorMessage;
+
+  Future<bool> login(String email, String password) async{
     setBusy(true);
-    await Future.delayed(Duration(seconds: 3));
+    final response = await loginService.login(email, password);
     setBusy(false);
+    return response;
   }
 
 }

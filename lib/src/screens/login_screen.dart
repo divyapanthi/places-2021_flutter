@@ -169,28 +169,19 @@ class _LoginScreenState extends State<LoginScreen> {
   }
 
   Future _onSubmit(BuildContext context, LoginViewModel model) async {
-
-    try {
-      await model.login(_emailController .text, _passwordController.text);
-      // var response =
-      //     await api.login(_emailController.text, _passwordController.text);
-      //delete this override sometime later
-      var response = Random().nextBool() ? UserModel() : null;
-      if (response == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Login failed")),
-        );
-      } else {
+      final success =
+        await model.login(_emailController .text, _passwordController.text);
+      if(success){
         Navigator.of(context).push(MaterialPageRoute(builder: (_) {
           return DashboardScreen();
         }));
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text("${model.errorMessage}")),
+        );
       }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("$e")),
-      );
-    }
   }
+
 
   Widget _buildSignUpSection(BuildContext context) {
     return Column(

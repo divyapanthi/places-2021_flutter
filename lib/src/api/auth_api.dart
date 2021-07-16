@@ -5,7 +5,7 @@ import 'package:placess_2021/src/core/constants/app_url.dart';
 import 'package:placess_2021/src/model/user_model.dart';
 
 class AuthApi {
-  Future<String?> login(String email, String password) async {
+  Future<String> login(String email, String password) async {
     Map<String, dynamic> requestBody = {
       "email": email,
       "password": password
