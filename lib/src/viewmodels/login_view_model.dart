@@ -4,7 +4,8 @@ import 'package:placess_2021/src/services/auth/login_service.dart';
 
 class LoginViewModel extends BaseViewModel{
 
-  final loginService = LoginService();
+  final LoginService loginService;
+  LoginViewModel({required this.loginService});
   String get errorMessage => loginService.errorMessage;
 
   Future<bool> login(String email, String password) async{

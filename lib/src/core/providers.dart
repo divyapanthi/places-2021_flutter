@@ -17,6 +17,6 @@ final independentProviders = [
 final dependentProviders = [
   ProxyProvider<AuthApi, LoginService>(
       update: (BuildContext context, AuthApi api, LoginService? service){
-        return LoginService();
+        return LoginService(api: api);
       })
 ] ;

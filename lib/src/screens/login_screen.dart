@@ -7,6 +7,7 @@ import 'package:placess_2021/src/core/base_widget.dart';
 import 'package:placess_2021/src/model/user_model.dart';
 import 'package:placess_2021/src/screens/signup_screen.dart';
 import 'package:placess_2021/src/screens/dashboard_screen.dart';
+import 'package:placess_2021/src/utils/snackbar_helper.dart';
 import 'package:placess_2021/src/viewmodels/login_view_model.dart';
 import 'package:placess_2021/src/widgets/custom_app_bar.dart';
 import 'package:placess_2021/src/widgets/input_email.dart';
@@ -39,7 +40,7 @@ class _LoginScreenState extends State<LoginScreen> {
         subTitle: "Login to your \n account",
       ),
       body: BaseWidget<LoginViewModel>(
-        model: LoginViewModel(),
+        model: LoginViewModel(loginService: Provider.of(context)),
         // onModelReady: (model){}, //not required in login
         builder: (BuildContext context, LoginViewModel model, Widget? child) {
           return Column(
@@ -176,9 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
           return DashboardScreen();
         }));
       }else{
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("${model.errorMessage}")),
-        );
+        showSnackBar(context, model.errorMessage);
       }
   }
 
