@@ -4,7 +4,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:placess_2021/src/api/auth_api.dart';
 import 'package:placess_2021/src/model/user_model.dart';
-import 'package:placess_2021/src/screens/dashboard_screen.dart';
+import 'package:placess_2021/src/screens/dashboard/dashboard_screen.dart';
 import 'package:placess_2021/src/utils/snackbar_helper.dart';
 import 'package:placess_2021/src/widgets/custom_app_bar.dart';
 import 'package:placess_2021/src/widgets/input_email.dart';
@@ -13,7 +13,7 @@ import 'package:placess_2021/src/widgets/input_password.dart';
 import 'package:placess_2021/src/widgets/input_phone.dart';
 import 'package:placess_2021/src/widgets/shared/app_colors.dart';
 
-import 'dashboard_screen.dart';
+import '../dashboard/dashboard_screen.dart';
 
 class SignUpScreen extends StatelessWidget {
   final TextEditingController _emailController =

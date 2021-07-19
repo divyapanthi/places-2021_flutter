@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:placess_2021/src/core/providers.dart';
-import 'package:placess_2021/src/screens/login_screen.dart';
+import 'package:placess_2021/src/screens/dashboard/dashboard_screen.dart';
+import 'package:placess_2021/src/screens/auth/login_screen.dart';
 import 'package:provider/provider.dart';
 
 Future<void> main() async {
@@ -14,7 +15,7 @@ class App extends StatelessWidget {
       providers: providers,
         child: MaterialApp(
         theme: ThemeData.light(),
-        home: LoginScreen(),
+        home: DashboardScreen(),
       ),
     );
   }

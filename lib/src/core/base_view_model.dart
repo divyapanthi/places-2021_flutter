@@ -6,7 +6,7 @@ class BaseViewModel extends ChangeNotifier{
   bool get busy => _busy; // getter since private variable, returns _busy
 
   //setter to set values
-  void  setBusy(bool val){
+  void setBusy(bool val){
     _busy = val;
     notifyListeners();
   }
