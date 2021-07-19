@@ -10,6 +10,8 @@ import 'package:provider/provider.dart';
 
 class DashboardScreen extends StatelessWidget {
   static const screens = [ExploreScreen(), FavoriteScreen(), ProfileScreen()];
+  final GlobalKey<ScaffoldState> _scaffoldKey =GlobalKey();
+
   @override
   Widget build(BuildContext context) {
     return BaseWidget<DashboardViewModel>(
@@ -18,10 +20,11 @@ class DashboardScreen extends StatelessWidget {
       ),
       builder: (context, DashboardViewModel model, Widget? child) {
         return Scaffold(
+          key: _scaffoldKey,
           appBar: buildAppBar(model,context),
           body: _buildBody(model),
           bottomNavigationBar: _buildBottomNavigation(context, model),
-          drawer: _buildNavigationDrawer(model),
+          drawer: _buildNavigationDrawer(model, context),
         );
       }
     );
@@ -30,13 +33,17 @@ class DashboardScreen extends StatelessWidget {
   AppBar buildAppBar(DashboardViewModel model, BuildContext context) {
     return AppBar(
           title: Text(model.getAppbarTitle(), style:  TextStyle(color: blackColor87)),
-          backgroundColor: Colors.red ,
-          // leading: IconButton(icon: Icon(Icons.horizontal_split_outlined),onPressed: (){
-          //   bool drawerOpen = Scaffold.of(context).isDrawerOpen;
-          //   if(!drawerOpen){
-          //     Scaffold.of(context).openDrawer();
-          //   }
-          // },),
+          backgroundColor: whiteColor ,
+          leading: IconButton(
+            icon: Icon(
+                Icons.menu,
+                    color: Colors.black87,
+          ),onPressed: (){
+            bool drawerOpen = _scaffoldKey.currentState!.isDrawerOpen;
+            if(!drawerOpen){
+              _scaffoldKey.currentState!.openDrawer();
+            }
+          },),
           actions: [
             IconButton(
               icon: Icon(
@@ -77,37 +84,57 @@ class DashboardScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildNavigationDrawer(DashboardViewModel model) {
+  Widget _buildNavigationDrawer(DashboardViewModel model, BuildContext context) {
     return Container(
-      width: 200,
+      width: 220,
       color: whiteColor,
-      child: Column(
-        children: [
-          Container(
-            color: blackColor54,
-            height: 10,
-          ),
-          ListTile(
-            title: Text("Explore"),
-            trailing: Icon(Icons.explore),
-          ),
-          ListTile(
-            title: Text("Favorite"),
-            trailing: Icon(Icons.favorite_outlined),
-          ),
-          ListTile(
-            title: Text("Profile"),
-            trailing: Icon(Icons.person),
-          ),
-          ListTile(
-            title: Text("About"),
-            trailing: Icon(Icons.info),
-          ),
-          ListTile(
-            title: Text("Logout"),
-            trailing: Icon(Icons.exit_to_app),
-          ),
-        ],
+      child: Drawer(
+        child: Column(
+          children: [
+            Container(
+              color: blackColor54,
+              height: 80,
+            ),
+            ListTile(
+              title: Text("Explore"),
+              trailing: Icon(Icons.explore),
+              selected: model.currentIndex == 0,
+              onTap:() {
+                model.changeTab(0);
+                Navigator.of(context).pop();
+              }
+            ),
+            ListTile(
+              title: Text("Favorite"),
+              trailing: Icon(Icons.favorite_outlined),
+              selected: model.currentIndex == 1,
+                onTap:() {
+                  model.changeTab(1);
+                  Navigator.of(context).pop();
+                }
+            ),
+
+            ListTile(
+              title: Text("Profile"),
+              trailing: Icon(Icons.person),
+              selected: model.currentIndex == 2,
+                onTap:() {
+                  model.changeTab(2);
+                  Navigator.of(context).pop();
+                }
+            ),
+
+            ListTile(
+              title: Text("About us"),
+              trailing: Icon(Icons.info),
+            ),
+
+            ListTile(
+              title: Text("Logout"),
+              trailing: Icon(Icons.exit_to_app),
+            ),
+          ],
+        ),
       ),
     );
   }
