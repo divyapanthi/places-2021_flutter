@@ -33,6 +33,31 @@ class AuthApi {
     }
   }
 
+  Future<UserModel> fetchUserDetail(String token) async {
+    try {
+      var uri = Uri.parse(Appurl.PROFILE_URL);
+      final response = await get(
+        uri,
+        headers: {"Content-Type": "application/json",
+          // "Authorization": "Bearer $token",
+          "x-auth-token": token,
+        },
+      );
+      final body = response.body;
+      print("me response $body");
+      final parsed = jsonDecode(body);
+
+      if(parsed["data"]==null){
+        throw Exception(parsed["error"] ?? "Could not get your profile details");
+      }
+      return UserModel.fromJson(parsed["data"]);
+
+    } catch (e) {
+      print("profile fetch exception $e");
+      throw Exception("$e");
+    }
+  }
+
   Future<UserModel?> register(
       String name, String phone, String email, String password) async {
     Map<String, dynamic> requestBody = {
