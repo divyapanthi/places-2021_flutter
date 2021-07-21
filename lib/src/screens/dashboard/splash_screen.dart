@@ -18,11 +18,13 @@ class SplashScreen extends StatelessWidget {
       builder: (context, SplashViewModel model, child) {
         return Scaffold(
           body: Container(
+            // width: MediaQuery.of(context).size.width,
+            // height: MediaQuery.of(context).size.height,
+
             decoration: BoxDecoration(
               image: DecorationImage(
-                image: AssetImage(
-                  "assets/images/splash_logo.png"
-                )
+                image: AssetImage("assets/images/splash_logo.jpg"),
+                    fit: BoxFit.cover,
               )
             ),
           ),

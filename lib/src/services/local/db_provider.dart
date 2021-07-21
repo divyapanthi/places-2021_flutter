@@ -26,7 +26,7 @@ import 'package:sqflite/sqflite.dart';
               isAdmin INTEGER,
               name TEXT,
               email TEXT,
-              phone TEXT,
+              phone INTEGER,
               registrationDate TEXT
             )
         """);

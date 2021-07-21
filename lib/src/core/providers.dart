@@ -5,6 +5,7 @@ import 'package:placess_2021/src/services/auth_rx_provider.dart';
 import 'package:placess_2021/src/services/dashboard/dashboard_service.dart';
 import 'package:placess_2021/src/services/local/cache_provider.dart';
 import 'package:placess_2021/src/services/local/db_provider.dart';
+import 'package:placess_2021/src/services/splash_service.dart';
 import 'package:provider/provider.dart';
 import 'package:provider/single_child_widget.dart';
 
@@ -40,4 +41,18 @@ final List<SingleChildWidget> dependantProviders = [
       return DashboardService(api: api);
     },
   ),
+
+  ProxyProvider3<DbProvider, CacheProvider, AuthRxProvider,
+      SplashService>(
+    update: (BuildContext context,
+        DbProvider dbProvider,
+        CacheProvider cacheProvider,
+        AuthRxProvider authRxProvider,
+        SplashService? service) {
+      return SplashService(
+          authRxProvider: authRxProvider,
+          cacheProvider: cacheProvider,
+          dbProvider: dbProvider);
+    },
+  )
 ];
