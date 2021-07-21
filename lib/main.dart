@@ -15,7 +15,7 @@ class App extends StatelessWidget {
       providers: providers,
         child: MaterialApp(
         theme: ThemeData.light(),
-        home: DashboardScreen(),
+        home: LoginScreen(),
       ),
     );
   }

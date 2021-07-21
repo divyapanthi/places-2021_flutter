@@ -12,6 +12,7 @@ class UserModel {
         this.email,
         this.phone,
         this.registrationDate});
+
   UserModel.fromJson(Map<String, dynamic> json) {
     isAdmin = json['isAdmin'];
     sId = json['_id'];

@@ -6,17 +6,20 @@ import 'package:placess_2021/src/services/dashboard/dashboard_service.dart';
 import 'package:placess_2021/src/services/local/cache_provider.dart';
 import 'package:placess_2021/src/services/local/db_provider.dart';
 import 'package:provider/provider.dart';
-final providers = [
+import 'package:provider/single_child_widget.dart';
+
+final List<SingleChildWidget> providers = [
   ...independentProviders,
   ...dependantProviders,
 ];
-final independentProviders = [
+final  List<SingleChildWidget>  independentProviders = [
   Provider.value(value: AuthApi()),
   Provider.value(value: DbProvider()),
   Provider.value(value: CacheProvider()),
   Provider.value(value: AuthRxProvider()),
 ];
-final dependantProviders = [
+
+final List<SingleChildWidget> dependantProviders = [
   ProxyProvider4<AuthApi, DbProvider, CacheProvider, AuthRxProvider,
       LoginService>(
     update: (BuildContext context,
