@@ -5,7 +5,7 @@ import 'package:placess_2021/src/services/auth_rx_provider.dart';
 import 'package:placess_2021/src/services/local/cache_provider.dart';
 import 'package:placess_2021/src/services/local/db_provider.dart';
 
-class LoginService{
+class AuthService{
   // final api = AuthApi();
   //Implementing Dependency Injection
   final AuthApi api;
@@ -13,7 +13,7 @@ class LoginService{
   final CacheProvider cacheProvider;
   final AuthRxProvider authRxProvider;
 
-  LoginService({
+  AuthService({
       required this.dbProvider,
       required this.cacheProvider,
       required this.authRxProvider,
@@ -26,6 +26,18 @@ class LoginService{
     try{
       String token = await api.login(email, password);
     // fetch user profile, save in our local database, save token in local cache
+      return fetchUserDetail(token);
+
+    }catch(e){
+      _errorMessage = "$e".replaceAll("Exception", "");
+      return false;
+    }
+  }
+
+  Future<bool> signup(String name, String phone, String email, String password) async {
+    try{
+      String token = await api.register(name, phone, email, password);
+      // fetch user profile, save in our local database, save token in local cache
       return fetchUserDetail(token);
 
     }catch(e){

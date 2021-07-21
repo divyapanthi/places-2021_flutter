@@ -2,16 +2,17 @@ import 'dart:math';
 
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:placess_2021/src/api/auth_api.dart';
-import 'package:placess_2021/src/model/user_model.dart';
+import 'package:placess_2021/src/core/base_widget.dart';
 import 'package:placess_2021/src/screens/dashboard/dashboard_screen.dart';
 import 'package:placess_2021/src/utils/snackbar_helper.dart';
+import 'package:placess_2021/src/viewmodels/auth/signup_view_model.dart';
 import 'package:placess_2021/src/widgets/custom_app_bar.dart';
 import 'package:placess_2021/src/widgets/input_email.dart';
 import 'package:placess_2021/src/widgets/input_name.dart';
 import 'package:placess_2021/src/widgets/input_password.dart';
 import 'package:placess_2021/src/widgets/input_phone.dart';
 import 'package:placess_2021/src/widgets/shared/app_colors.dart';
+import 'package:provider/provider.dart';
 
 import '../dashboard/dashboard_screen.dart';
 
@@ -39,30 +40,37 @@ class SignUpScreen extends StatelessWidget {
         context: context,
         subTitle: "Create your \n account",
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            child: ListView(
-              shrinkWrap: true,
-              children: [
-                SizedBox(height: 24),
-                InputName(
-                  controller: _nameController,
+      body: BaseWidget<SignupViewModel>(
+        model: SignupViewModel(
+          authService: Provider.of(context)
+        ),
+        builder: (context, SignupViewModel model, child) {
+          return Column(
+            children: <Widget>[
+              Expanded(
+                child: ListView(
+                  shrinkWrap: true,
+                  children: [
+                    SizedBox(height: 24),
+                    InputName(
+                      controller: _nameController,
+                    ),
+                    InputPhone(
+                      controller: _phoneController,
+                    ),
+                    InputEmail(controller: _emailController),
+                    InputPassword(controller: _passwordController),
+                    _buildSubmitButton(context, model),
+                    SizedBox(height: 12),
+                    _buildTermsAndConditions(context),
+                    SizedBox(height: 12),
+                  ],
                 ),
-                InputPhone(
-                  controller: _phoneController,
-                ),
-                InputEmail(controller: _emailController),
-                InputPassword(controller: _passwordController),
-                _buildSubmitButton(context),
-                SizedBox(height: 12),
-                _buildTermsAndConditions(context),
-                SizedBox(height: 12),
-              ],
-            ),
-          ),
-          _buildSignInSection(context)
-        ],
+              ),
+              _buildSignInSection(context)
+            ],
+          );
+        }
       ),
     );
   }
@@ -116,7 +124,7 @@ class SignUpScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildSubmitButton(BuildContext context) {
+  Widget _buildSubmitButton(BuildContext context, SignupViewModel model) {
     return Container(
       margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
       child: ButtonTheme(
@@ -129,36 +137,24 @@ class SignUpScreen extends StatelessWidget {
             padding: EdgeInsets.all(18.0),
             primary: primaryColor,
           ),
-          onPressed: () {
-            _onSubmit(context);
+          onPressed: model.busy ? null : () {
+            _onSubmit(context, model);
           },
-          child: Text("Submit"),
+          child: model.busy ? CircularProgressIndicator() : Text("Submit"),
         ),
       ),
     );
   }
 
-  Future _onSubmit(BuildContext context) async {
-    final api = AuthApi();
-    try {
-      // final response = await api.register(
-      //     _nameController.text,
-      //     _phoneController.text,
-      //     _emailController.text,
-      //     _passwordController.text);
-      var response = Random().nextBool() ? UserModel() : null;
-      if (response == null) {
-        //todo show a snackbar message
-        showSnackBar(context, "Signup failed, please try again");
-      } else {
-        Navigator.of(context).push(MaterialPageRoute(builder: (_) {
-          return DashboardScreen();
-        }));
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("$e")),
-      );
+  Future _onSubmit(BuildContext context, SignupViewModel model) async {
+    final success =
+    await model.signup(_nameController.text, _phoneController.text, _emailController .text, _passwordController.text);
+    if(success){
+      Navigator.of(context).push(MaterialPageRoute(builder: (_) {
+        return DashboardScreen();
+      }));
+    }else{
+      showSnackBar(context, model.errorMessage);
     }
   }
 

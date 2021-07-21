@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:placess_2021/src/api/auth_api.dart';
-import 'package:placess_2021/src/services/auth/login_service.dart';
+import 'package:placess_2021/src/services/auth/auth_service.dart';
 import 'package:placess_2021/src/services/auth_rx_provider.dart';
 import 'package:placess_2021/src/services/dashboard/dashboard_service.dart';
 import 'package:placess_2021/src/services/local/cache_provider.dart';
@@ -22,14 +22,14 @@ final  List<SingleChildWidget>  independentProviders = [
 
 final List<SingleChildWidget> dependantProviders = [
   ProxyProvider4<AuthApi, DbProvider, CacheProvider, AuthRxProvider,
-      LoginService>(
+      AuthService>(
     update: (BuildContext context,
         AuthApi api,
         DbProvider dbProvider,
         CacheProvider cacheProvider,
         AuthRxProvider authRxProvider,
-        LoginService? service) {
-      return LoginService(
+        AuthService? service) {
+      return AuthService(
           api: api,
           authRxProvider: authRxProvider,
           cacheProvider: cacheProvider,

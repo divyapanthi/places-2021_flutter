@@ -58,7 +58,7 @@ class AuthApi {
     }
   }
 
-  Future<UserModel?> register(
+  Future<String> register(
       String name, String phone, String email, String password) async {
     Map<String, dynamic> requestBody = {
       "email": email,
@@ -67,7 +67,7 @@ class AuthApi {
       "phone": phone,
     };
     try {
-      var uri = Uri.parse("https://api.fresco-meat.com/api/albums/signup");
+      var uri = Uri.parse(Appurl.REGISTER_URL);
       final response = await post(
         uri,
         body: jsonEncode(requestBody),
@@ -75,13 +75,16 @@ class AuthApi {
       );
       final body = response.body;
       print("Signup response $body");
-      if (response.statusCode != 201) return null;
-      final parsedMap = jsonDecode(body);
-      final user = UserModel.fromJson(parsedMap);
-      return user;
+      final parsed = jsonDecode(body);
+
+      if(parsed["token"]==null){
+        throw Exception(parsed["error"] ?? "Could not login with the credential provided");
+      }
+      return parsed["token"];
+
     } catch (e) {
-      print("Signup exception $e");
-      return null;
+      print("signup exception $e");
+      throw Exception("$e");
     }
   }
 }

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:placess_2021/src/core/base_view_model.dart';
-import 'package:placess_2021/src/services/auth/login_service.dart';
+import 'package:placess_2021/src/services/auth/auth_service.dart';
 
 class LoginViewModel extends BaseViewModel{
 
-  final LoginService loginService;
+  final AuthService loginService;
   LoginViewModel({required this.loginService});
   String get errorMessage => loginService.errorMessage;
 
