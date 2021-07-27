@@ -21,6 +21,7 @@ class UserModel {
     phone = json['phone'];
     registrationDate = json['registrationDate'];
   }
+
   UserModel.fromDb(Map<String, dynamic> json) {
     isAdmin = json['isAdmin'] == 1;
     sId = json['id'];

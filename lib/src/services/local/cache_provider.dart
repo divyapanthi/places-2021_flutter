@@ -1,7 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 class CacheProvider {
-  SharedPreferences? _preferences;
+  SharedPreferences? _preferences; // we store small kind of values, and it is relatively fast.
   CacheProvider() {
     _init();
   }
